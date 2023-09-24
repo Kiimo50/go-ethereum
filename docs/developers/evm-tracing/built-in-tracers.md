@@ -195,24 +195,7 @@ Example invocation with the `onlyTopCall` flag:
 
 ### prestateTracer {#prestate-tracer}
 
-The prestate tracer has two modes: `prestate` and `diff`. The `prestate` mode returns the accounts necessary to execute a given transaction. `diff` mode returns the differences between the transaction's pre and post-state (i.e. what changed because the transaction happened). The `prestateTracer` defaults to `prestate` mode. It reexecutes the given transaction and tracks every part of state that is touched. This is similar to the concept of a [stateless witness](https://ethresear.ch/t/the-stateless-client-concept/172), the difference being this tracer doesn't return any cryptographic proof, rather only the trie leaves. The result is an object. The keys are addresses of accounts. The value is an object with the following fields:
-
-| field   | type              | description                   |
-| ------- | ----------------- | ----------------------------- |
-| balance | string            | balance in Wei                |
-| nonce   | uint64            | nonce                         |
-| code    | string            | hex-encoded bytecode          |
-| storage | map[string]string | storage slots of the contract |
-
-In `diff` mode the result object will contain a `pre` and a `post` object:
-
-1. Any read-only access is omitted completely from the result. This mode is only concerned with state modifications.
-2. In `pre` you will find the state of an account before the tx started, and in post its state after tx execution finished.
-3. `post` will contain only the modified fields. e.g. if `nonce` of an account hasn't changed it will be omitted from `post`.
-4. Deletion (i.e. account selfdestruct, or storage clearing) will be signified by inclusion in `pre` and omission in `post`.
-5. Insertion (i.e. account creation or new slots) will be signified by omission in `pre` and inclusion in `post`.
-
-To run this tracer in `diff` mode, pass `tracerConfig: {diffMode: true}` in the API call.
+The prestate tracer has two modes: `prestate` and `diff`. The `prestate` mode returns the accounts necessary to execute a given transaction. `diff` mode returns the differences between the transaction's pre and post-state (i.e. what changed because the transaction happened). The `prestateTracer` defaults to `prestate` mode. 
 
 Example of `prestate` mode:
 
